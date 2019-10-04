@@ -1,0 +1,81 @@
+package Crypts;
+
+import java.util.Arrays;
+
+public class WienerCode {
+
+    private static char[][] web;
+    private static char[] initializedKey;
+
+    static {
+        web = new char[33][33];
+        char point = 'А';
+        for (int i = 0; i < web.length; i++) {
+            char letter = Character.toUpperCase(point);
+            for (int n = 0; n < web[i].length; n++) {
+                if (i == 0 && n == 0) {
+                    web[0][0] = ' ';
+                    continue;
+                }
+                web[i][n] = Character.toUpperCase(letter);
+                letter++;
+            }
+            if (i == 0)
+                continue;
+            point++;
+        }
+    }
+
+    private static void initializeKey(int length, String strKey) {
+        initializedKey = new char[length];
+        strKey = strKey.replaceAll("\\s+","");
+        strKey = strKey.toUpperCase();
+        char[] key = strKey.toCharArray();
+        int j = 0;
+        for (int i = 0; i < length; i++) {
+            initializedKey[i] = key[j];
+            if (j == key.length - 1) {
+                j = 0;
+                continue;
+            }
+            j++;
+        }
+    }
+
+    public void showWeb() {
+        for (char[] chars : web) {
+            for (char aChar : chars) {
+                System.out.print(aChar);
+            }
+            System.out.println();
+        }
+    }
+
+    public static String encryptMsg(String strMessage, String strKey) {
+        strMessage = strMessage.replaceAll("\\s+","");
+        strMessage = strMessage.toUpperCase();
+        char[] message = strMessage.toCharArray();
+        char[] encryptMessage = new char[message.length];
+        initializeKey(message.length, strKey);
+        for (int i = 0; i < message.length; i++) {
+            encryptMessage[i] = web[Arrays.binarySearch(web[0], message[i])]
+                    [Arrays.binarySearch(web[0], initializedKey[i])];
+        }
+        return new String(encryptMessage);
+    }
+
+    public static String decryptMsg(String strEncryptMessage, String strKey) {
+        strEncryptMessage = strEncryptMessage.replaceAll("\\s+","");
+        strEncryptMessage = strEncryptMessage.toUpperCase();
+        char[] encryptMessage = strEncryptMessage.toCharArray();
+        char[] decryptMessage = new char[encryptMessage.length];
+        initializeKey(encryptMessage.length, strKey);
+        for (int i = 0; i < encryptMessage.length; i++) {
+            String str = new String(web[0]);
+            int line = str.indexOf(initializedKey[i], 1);
+            String str1 = new String(web[line]);
+            decryptMessage[i] = web[0][str1.indexOf(encryptMessage[i], 1)];
+        }
+        return new String(decryptMessage);
+    }
+}
