@@ -1,0 +1,10 @@
+from math import radians, pi
+
+#variant 1
+b = float(input("Enter the degrees: "))
+print("{0} degrees are {1} radians".format(b, radians(b)))
+
+#variant 2
+b = int(input("Enter the degrees: "))
+r = b * pi/180
+print("{0} degrees are {1} radians".format(b, r))
