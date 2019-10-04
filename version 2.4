@@ -1,0 +1,42 @@
+package com.main;
+
+import Crypts.WienerCode;
+
+import java.io.*;
+import java.util.Scanner;
+public class Main {
+    public static void main(String[] args) throws IOException {
+        Scanner in = new Scanner(System.in);
+        File fileInput = new File("input.txt");
+        File fileOutput = new File("output.txt");
+        File fileKey = new File("key.txt");
+
+        WienerCode wienerCode = new WienerCode();
+        wienerCode.showWeb();
+
+        FileWriter fileWriter = new FileWriter(fileOutput);
+        FileReader fileReader1 = new FileReader(fileInput);
+        FileReader fileReaderKey = new FileReader(fileKey);
+        BufferedReader bufferedReader = new BufferedReader(fileReader1);
+        BufferedReader bufferedReaderKey = new BufferedReader(fileReaderKey);
+
+        System.out.println("true - decrypt\nfalse - encrypt");
+        boolean choose = in.nextBoolean();
+        if(choose){
+            while (bufferedReader.ready()) {
+                fileWriter.write(
+                        WienerCode.decryptMsg(bufferedReader.readLine(), bufferedReaderKey.readLine())+"\n");
+            }
+        }
+        else{
+            while (bufferedReader.ready()) {
+                fileWriter.write(
+                        WienerCode.encryptMsg(bufferedReader.readLine(), bufferedReaderKey.readLine())+"\n");
+            }
+        }
+        bufferedReader.close();
+        bufferedReaderKey.close();
+        fileWriter.flush();
+        fileWriter.close();
+    }
+}
