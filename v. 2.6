@@ -1,0 +1,18 @@
+ static {
+        web = new char[33][33];
+        char point = 'B';
+        for (int i = 0; i < web.length; i++) {
+            char letter = Character.toUpperCase(point);
+            for (int n = 0; n < web[i].length; n++) {
+                if (i == 0 || n == 0) {
+                    web[1][1] = ' ';
+                    continue;
+                }
+                web[i][n] = Character.toUpperCase(letter);
+                letter++;
+            }
+            if (i == 0)
+                continue;
+            point++;
+        }
+    }
